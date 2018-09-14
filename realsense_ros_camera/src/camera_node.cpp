@@ -143,7 +143,8 @@ private:
       if (serial_no_.empty() || (serial_no_ == std::string(detected_dev->get_serial())))
       {
         device_ = detected_dev;
-        break;
+	auto device_name_ = device_ -> get_name();
+	if (std::string(device_name_).find("ZR300") != std::string::npos) break;
       }
     }
 
@@ -189,35 +190,35 @@ private:
     // Stream publishers and latched topics
     if (true == enable_[rs::stream::color])
     {
-      image_publishers_[rs::stream::color] = image_transport.advertise("camera/color/image_raw", 1);
+      image_publishers_[rs::stream::color] = image_transport.advertise("zr300/color/image_raw", 1);
       info_publisher_[rs::stream::color] = 
-        node_handle.advertise< sensor_msgs::CameraInfo >("camera/color/camera_info", 1);
+        node_handle.advertise< sensor_msgs::CameraInfo >("zr300/color/camera_info", 1);
     }
 
     if (true == enable_[rs::stream::depth])
     {
-      image_publishers_[rs::stream::depth] = image_transport.advertise("camera/depth/image_raw", 1);
+      image_publishers_[rs::stream::depth] = image_transport.advertise("zr300/depth/image_raw", 1);
       info_publisher_[rs::stream::depth] = 
-        node_handle.advertise< sensor_msgs::CameraInfo >("camera/depth/camera_info", 1);
+        node_handle.advertise< sensor_msgs::CameraInfo >("zr300/depth/camera_info", 1);
     
-      pointcloud_publisher_ = node_handle.advertise<sensor_msgs::PointCloud2>("/camera/points", 1);
+      pointcloud_publisher_ = node_handle.advertise<sensor_msgs::PointCloud2>("/zr300/points", 1);
     }
 
     if (isZR300_)
     {
       // Stream publishers
-      image_publishers_[rs::stream::fisheye] = image_transport.advertise("camera/fisheye/image_raw", 1);
+      image_publishers_[rs::stream::fisheye] = image_transport.advertise("zr300/fisheye/image_raw", 1);
       info_publisher_[rs::stream::fisheye] = 
-        node_handle.advertise< sensor_msgs::CameraInfo >("camera/fisheye/camera_info", 1);
+        node_handle.advertise< sensor_msgs::CameraInfo >("zr300/fisheye/camera_info", 1);
 
-      imu_publishers_[RS_EVENT_IMU_GYRO] = node_handle.advertise< sensor_msgs::Imu >("camera/gyro/sample", 100); 
-      imu_publishers_[RS_EVENT_IMU_ACCEL] = node_handle.advertise< sensor_msgs::Imu >("camera/accel/sample", 100);
+      imu_publishers_[RS_EVENT_IMU_GYRO] = node_handle.advertise< sensor_msgs::Imu >("zr300/gyro/sample", 100); 
+      imu_publishers_[RS_EVENT_IMU_ACCEL] = node_handle.advertise< sensor_msgs::Imu >("zr300/accel/sample", 100);
 
       // Latched topics
-      fe2imu_publisher_ = node_handle.advertise< Extrinsics >("camera/extrinsics/fisheye2imu", 1, true);
-      fe2depth_publisher_ = node_handle.advertise< Extrinsics >("camera/extrinsics/fisheye2depth", 1, true);
-      accelInfo_publisher_ = node_handle.advertise< IMUInfo >("camera/accel/imu_info", 1, true);
-      gyroInfo_publisher_ = node_handle.advertise< IMUInfo >("camera/gyro/imu_info", 1, true);
+      fe2imu_publisher_ = node_handle.advertise< Extrinsics >("zr300/extrinsics/fisheye2imu", 1, true);
+      fe2depth_publisher_ = node_handle.advertise< Extrinsics >("zr300/extrinsics/fisheye2depth", 1, true);
+      accelInfo_publisher_ = node_handle.advertise< IMUInfo >("zr300/accel/imu_info", 1, true);
+      gyroInfo_publisher_ = node_handle.advertise< IMUInfo >("zr300/gyro/imu_info", 1, true);
     }
   }//end setupPublishers
 
